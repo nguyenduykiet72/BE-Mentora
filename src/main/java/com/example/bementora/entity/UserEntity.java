@@ -19,7 +19,7 @@ public class UserEntity {
     @Column(name = "userId", columnDefinition = "UUID")
     private UUID userId;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password")
