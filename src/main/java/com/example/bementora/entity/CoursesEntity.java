@@ -19,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CoursesEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "courseId", columnDefinition = "UUID")
     private UUID courseId;
 

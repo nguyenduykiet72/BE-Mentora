@@ -3,7 +3,6 @@ package com.example.bementora.controller;
 import com.example.bementora.common.ApiResponse;
 import com.example.bementora.dto.request.UserCreationRequest;
 import com.example.bementora.dto.response.UserCreationResponse;
-import com.example.bementora.dto.response.UserResponse;
 import com.example.bementora.entity.UserEntity;
 import com.example.bementora.service.UserService;
 import jakarta.validation.Valid;
@@ -27,7 +26,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public Map<String, Object> getUserById(@PathVariable("userId") UUID userId) {
-        UserResponse userResponse = userService.findById(userId);
+        UserCreationResponse userResponse = userService.findById(userId);
         log.info("userResponse: {}", userResponse);
 
         Map<String, Object> result = new LinkedHashMap<>();
