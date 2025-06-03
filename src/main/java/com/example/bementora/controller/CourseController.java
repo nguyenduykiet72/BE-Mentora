@@ -2,16 +2,16 @@ package com.example.bementora.controller;
 
 import com.example.bementora.common.ApiResponse;
 import com.example.bementora.dto.request.CourseCreationRequest;
+import com.example.bementora.dto.request.CourseUpdateRequest;
 import com.example.bementora.dto.response.CourseCreationResponse;
 import com.example.bementora.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/courses")
@@ -33,5 +33,21 @@ public class CourseController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse<CourseCreationResponse>> updateCourse(@RequestBody CourseUpdateRequest courseUpdateRequest,
+                                                                            @RequestParam UUID instructorId) {
+        log.info("Received request to update course: {}", courseUpdateRequest);
+
+        CourseCreationResponse updateCourse = courseService.updateCourse(courseUpdateRequest, instructorId);
+
+        ApiResponse<CourseCreationResponse> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "User created successfully",
+                updateCourse
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
