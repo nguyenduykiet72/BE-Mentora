@@ -38,9 +38,9 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<UserEntity>>> getAllUsers() {
-        List<UserEntity> users = userService.getAllUser();
-        ApiResponse<List<UserEntity>> response = new ApiResponse<>(
+    public ResponseEntity<ApiResponse<List<UserCreationResponse>>> getAllUsers() {
+        List<UserCreationResponse> users = userService.getAllUser();
+        ApiResponse<List<UserCreationResponse>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "All users retrieved successfully",
                 users

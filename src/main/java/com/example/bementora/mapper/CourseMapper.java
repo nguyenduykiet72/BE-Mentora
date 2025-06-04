@@ -1,7 +1,7 @@
 package com.example.bementora.mapper;
 
 import com.example.bementora.dto.request.CourseUpdateRequest;
-import com.example.bementora.dto.response.CourseCreationResponse;
+import com.example.bementora.dto.response.CourseResponse;
 import com.example.bementora.entity.CoursesEntity;
 import org.mapstruct.*;
 
@@ -30,5 +30,5 @@ public interface CourseMapper {
     @Mapping(target = "voucherCourses", ignore = true)
     void updateCourseFromDto(CourseUpdateRequest dto, @MappingTarget CoursesEntity entity);
     
-    CourseCreationResponse entityToResponse(CoursesEntity entity);
+    CourseResponse entityToResponse(CoursesEntity entity);
 }

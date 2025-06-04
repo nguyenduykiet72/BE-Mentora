@@ -17,7 +17,7 @@ import java.util.UUID;
 public class UserCreationResponse implements Serializable {
     private UUID id;
     private String email;
-    private String password;
+//    private String password;
     private String avatar;
     private RoleEnum role;
     private LocalDateTime createdAt;

@@ -2,7 +2,7 @@ package com.example.bementora.service.impl;
 
 import com.example.bementora.dto.request.CourseCreationRequest;
 import com.example.bementora.dto.request.CourseUpdateRequest;
-import com.example.bementora.dto.response.CourseCreationResponse;
+import com.example.bementora.dto.response.CourseResponse;
 import com.example.bementora.entity.CoursesEntity;
 import com.example.bementora.mapper.CourseMapper;
 import com.example.bementora.repository.CourseRepository;
@@ -23,7 +23,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
 
     @Override
-    public CourseCreationResponse createCourses(CourseCreationRequest courseCreationRequest) {
+    public CourseResponse createCourses(CourseCreationRequest courseCreationRequest) {
         CoursesEntity coursesEntity = new CoursesEntity();
 
         coursesEntity.setInstructorId(courseCreationRequest.getInstructorId());
@@ -41,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
 
         CoursesEntity savedCourse =  courseRepository.save(coursesEntity);
 
-        CourseCreationResponse response = new CourseCreationResponse();
+        CourseResponse response = new CourseResponse();
         response.setInstructorId(savedCourse.getInstructorId());
         response.setTitle(savedCourse.getTitle());
         response.setDescription(savedCourse.getDescription());
@@ -58,7 +58,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public CourseCreationResponse updateCourse(CourseUpdateRequest courseUpdateRequest, UUID instructorId) {
+    public CourseResponse updateCourse(CourseUpdateRequest courseUpdateRequest, UUID instructorId) {
         log.info("Updating course with request: {} by instructorId {}", courseUpdateRequest, instructorId);
 
         CoursesEntity coursesEntity = courseRepository.findById(courseUpdateRequest.getCourseId())
