@@ -5,9 +5,9 @@ spring:
   devtools:
     add-properties: true
   datasource:
-      url: jdbc:postgresql://localhost:5432/mentora-java
-      username: postgres
-      password: 123456789
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,7 +17,20 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         use_sql_comments: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      database: 0
 
+  cache:
+    type: redis
+    redis:
+      time-to-live: 15m
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "mentora:"
 #springdoc:
 #  api-docs:
 #    enabled: true
