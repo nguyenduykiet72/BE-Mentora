@@ -24,36 +24,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponse createCourses(CourseCreationRequest courseCreationRequest) {
-        CoursesEntity coursesEntity = new CoursesEntity();
 
-        coursesEntity.setInstructorId(courseCreationRequest.getInstructorId());
-        coursesEntity.setTitle(courseCreationRequest.getTitle());
-        coursesEntity.setDescription(courseCreationRequest.getDescription());
-        coursesEntity.setOverview(courseCreationRequest.getOverview());
-        coursesEntity.setPrice(courseCreationRequest.getPrice());
-        coursesEntity.setDurationTime(courseCreationRequest.getDurationTime());
-        coursesEntity.setThumbnail(courseCreationRequest.getThumbnail());
-        coursesEntity.setApproved(courseCreationRequest.getApproved());
+        CoursesEntity coursesEntity = courseMapper.creationRequestToEntity(courseCreationRequest);
 
         LocalDateTime now = LocalDateTime.now();
         coursesEntity.setCreatedAt(now);
         coursesEntity.setUpdatedAt(now);
 
-        CoursesEntity savedCourse =  courseRepository.save(coursesEntity);
+        CoursesEntity savedCourse = courseRepository.save(coursesEntity);
 
-        CourseResponse response = new CourseResponse();
-        response.setInstructorId(savedCourse.getInstructorId());
-        response.setTitle(savedCourse.getTitle());
-        response.setDescription(savedCourse.getDescription());
-        response.setOverview(savedCourse.getOverview());
-        response.setDurationTime(savedCourse.getDurationTime());
-        response.setPrice(savedCourse.getPrice());
-        response.setApproved(savedCourse.getApproved());
-        response.setThumbnail(savedCourse.getThumbnail());
-        response.setCreatedAt(savedCourse.getCreatedAt());
-        response.setUpdatedAt(savedCourse.getUpdatedAt());
-
-        return response;
+        return courseMapper.entityToResponse(savedCourse);
     }
 
     @Override
@@ -76,4 +56,5 @@ public class CourseServiceImpl implements CourseService {
 
         return courseMapper.entityToResponse(updatedCourse);
     }
+
 }
