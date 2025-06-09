@@ -49,7 +49,7 @@ public class RedisCacheConfig {
                         redisCacheConfiguration().entryTtl(Duration.ofMinutes(10)))
                 .withCacheConfiguration("homepage-popular",
                         redisCacheConfiguration().entryTtl(Duration.ofMinutes(10)))
-                .withCacheConfiguration("homepage-recommended", // Fixed cache name
+                .withCacheConfiguration("homepage-recommended",
                         redisCacheConfiguration().entryTtl(Duration.ofMinutes(10)));
     }
 }

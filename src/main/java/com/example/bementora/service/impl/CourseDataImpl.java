@@ -25,7 +25,6 @@ public class CourseDataImpl implements CourseDataService {
     @Cacheable(value = "homepage-newest", unless = "#result.isEmpty()")
     public List<CourseResponse> getNewestCourses(int pageSize) {
         log.info("Fetching {} newest courses from database", pageSize);
-        log.info("📢 CACHE MISS: Fetching {} newest courses from database", pageSize);
         List<CoursesEntity> courses = courseRepository.findNewestCourses(
                 ApproveEnum.APPROVED,
                 PageRequest.of(0, pageSize)

@@ -31,22 +31,10 @@ spring:
       cache-null-values: false
       use-key-prefix: true
       key-prefix: "mentora:"
-#springdoc:
-#  api-docs:
-#    enabled: true
-#  swagger-ui:
-#    enabled: true
 
-#openapi:
-#  service:
-#    api-docs: backend-service
-#    title: Backend Service API Document
-#    version: 1.0.0
-#    server: http://localhost:${server.port}
-
-#jwt:
-#  secretKey: 123@abc456
-#  expiryMinutes: 1
-#  expiryDays: 14
-#  accessKey: 9d65fa89ca005c494febd286b2137e3a39a864a2d822633d2819e39a56c40a91
-#  refreshKey: 89e795a0d5084cb24c0e5021b8a0c9bca906c3542f89c4599e7a69602444fede
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
+      access-token-expiration: 3600000
+      refresh-token-expiration: 604800000
