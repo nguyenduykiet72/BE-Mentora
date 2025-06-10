@@ -11,4 +11,6 @@ public interface JwtService {
     String extractUsername(String token);
 
     boolean isTokenValid(String token, UserDetails userDetails);
+
+    boolean isTokenBlacklisted(String token);
 }

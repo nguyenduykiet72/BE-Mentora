@@ -3,6 +3,7 @@ package com.example.bementora.service.impl;
 import com.example.bementora.config.JwtProperties;
 import com.example.bementora.entity.UserEntity;
 import com.example.bementora.service.JwtService;
+import com.example.bementora.service.TokenBlackListService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,6 +23,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
     private final JwtProperties jwtProperties;
+    private final TokenBlackListService tokenBlackListService;
 
     @Override
     public String generateAccessToken(UserEntity user) {
@@ -50,7 +52,14 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public boolean isTokenValid(String token, UserDetails user) {
         final String username = extractUsername(token);
-        return (username.equals(user.getUsername())) && !isTokenExpired(token);
+        return (username.equals(user.getUsername()))
+                && !isTokenExpired(token)
+                && !isTokenBlacklisted(token);
+    }
+
+    @Override
+    public boolean isTokenBlacklisted(String token) {
+        return tokenBlackListService.isTokenBlacklisted(token) || isTokenExpired(token) ;
     }
 
     @Override

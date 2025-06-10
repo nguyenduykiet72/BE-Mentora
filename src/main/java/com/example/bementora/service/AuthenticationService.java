@@ -8,4 +8,8 @@ public interface AuthenticationService {
     AuthenticationResponse register(RegisterRequest registerRequest);
 
     AuthenticationResponse login(AuthenticationRequest authenticationRequest);
+
+    AuthenticationResponse refreshToken(String refreshToken);
+
+    void revokeRefreshToken(String refreshToken);
 }

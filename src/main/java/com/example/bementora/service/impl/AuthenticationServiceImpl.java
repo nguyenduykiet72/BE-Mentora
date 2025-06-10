@@ -93,6 +93,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Transactional
+    @Override
     public AuthenticationResponse refreshToken(String refreshToken) {
         RefreshTokenEntity token = refreshTokenRepository.findByToken(refreshToken)
                 .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
@@ -113,6 +114,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(newRefreshToken.getToken())
                 .build();
+    }
+
+    @Override
+    public void revokeRefreshToken(String refreshToken) {
+        RefreshTokenEntity token = refreshTokenRepository.findByToken(refreshToken).orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+        token.setRevoked(true);
+        refreshTokenRepository.save(token);
     }
 
     private RefreshTokenEntity createRefreshToken(UserEntity user) {
