@@ -10,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,16 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtServiceImpl implements JwtService {
     private final JwtProperties jwtProperties;
     private final TokenBlackListService tokenBlackListService;
 
     @Override
     public String generateAccessToken(UserEntity user) {
-        return generateToken(new HashMap<>(), user.getEmail(), jwtProperties.getAccessTokenExpiration());
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRole().name());
+        return generateToken(extraClaims, user.getEmail(), jwtProperties.getAccessTokenExpiration());
     }
 
     @Override
