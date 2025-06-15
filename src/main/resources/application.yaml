@@ -40,3 +40,22 @@ application:
       refreshTokenExpiration: 604800000
       cookie:
         secure: true
+
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    region: ${AWS_REGION:ap-southeast-1}
+    bucket-name: ${AWS_S3_BUCKET:mentora-course-videos}
+
+
+app:
+  video:
+    max-size: 2147483648  # 2GB in bytes
+    allowed-types:
+      - video/mp4
+      - video/quicktime
+      - video/x-msvideo
+      - video/x-flv
+      - video/webm
+    storage-path: ${VIDEO_STORAGE_PATH:videos}
