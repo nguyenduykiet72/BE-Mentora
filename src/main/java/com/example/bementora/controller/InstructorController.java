@@ -1,7 +1,9 @@
 package com.example.bementora.controller;
 
+import com.example.bementora.config.S3ConfigProperties;
 import com.example.bementora.dto.request.ConfirmUploadRequest;
 import com.example.bementora.dto.request.UploadUrlRequest;
+import com.example.bementora.dto.response.PresignedUrlResult;
 import com.example.bementora.dto.response.UploadUrlResponse;
 import com.example.bementora.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/instructor/videos")
@@ -17,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasRole('INSTRUCTOR')")
 public class InstructorController {
     private final S3Service s3Service;
+    private final S3Client s3Client;
+    private final S3ConfigProperties s3ConfigProperties;
 
     @PostMapping("/upload-url")
     public ResponseEntity<UploadUrlResponse> getUploadUrl(
@@ -25,20 +35,13 @@ public class InstructorController {
         if (!s3Service.isValidVideoType(request.contentType())) {
             return ResponseEntity.badRequest().body(new UploadUrlResponse("Invalid file type"));
         }
-
-        String presignedUrl = s3Service.generatePresignedUploadUrl(
+        PresignedUrlResult result = s3Service.generatePresignedUploadUrl(
                 request.fileName(),
                 request.instructorId(),
                 request.courseId()
         );
 
-        String s3Key = s3Service.buildS3Key(
-                request.instructorId(),
-                request.courseId(),
-                s3Service.generateUniqueFileName(request.fileName())
-        );
-
-        return ResponseEntity.ok(new UploadUrlResponse(presignedUrl, s3Key));
+        return ResponseEntity.ok(new UploadUrlResponse(result.uploadUrl(), result.s3Key()));
     }
 
     @PostMapping("/confirm-upload")
@@ -75,4 +78,5 @@ public class InstructorController {
             return ResponseEntity.badRequest().body("Failed to delete video");
         }
     }
+
 }

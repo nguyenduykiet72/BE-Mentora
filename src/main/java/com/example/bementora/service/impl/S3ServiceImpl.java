@@ -2,6 +2,7 @@ package com.example.bementora.service.impl;
 
 import com.example.bementora.config.S3ConfigProperties;
 import com.example.bementora.config.VideoConfigProperties;
+import com.example.bementora.dto.response.PresignedUrlResult;
 import com.example.bementora.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class S3ServiceImpl implements S3Service {
     private final VideoConfigProperties videoConfigProperties;
 
     @Override
-    public String generatePresignedUploadUrl(String fileName, Long instructorId, Long courseId) {
+    public PresignedUrlResult generatePresignedUploadUrl(String fileName, UUID instructorId, UUID courseId) {
         try {
             String uniqueFileName = generateUniqueFileName(fileName);
             String s3Key = buildS3Key(instructorId, courseId, uniqueFileName);
@@ -36,29 +37,28 @@ public class S3ServiceImpl implements S3Service {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(s3ConfigProperties.getBucketName())
                     .key(s3Key)
-                    .contentType("video/*")
+                    .contentType("video/mp4")
                     .build();
 
-            PutObjectPresignRequest putObjectPresignRequest = PutObjectPresignRequest.builder()
+            PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
                     .signatureDuration(Duration.ofSeconds(s3ConfigProperties.getPresignedUrlExpiration()))
                     .putObjectRequest(putObjectRequest)
                     .build();
 
-            PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
+            PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
 
             log.info("Generated presigned upload URL for key: {}", s3Key);
-            log.info("Presigned URL: {}", presignedRequest.url());
 
-            return presignedRequest.url().toString();
+            return new PresignedUrlResult(presignedRequest.url().toString(), s3Key);
 
         } catch (Exception e) {
             log.error("Error generating presigned upload URL: ", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to generate upload URL", e);
         }
     }
 
     @Override
-    public void confirmVideoUpload(String s3Key, Long instructorId, Long courseId) {
+    public void confirmVideoUpload(String s3Key, UUID instructorId, UUID courseId) {
         try {
             //verify object exists
             HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
@@ -106,7 +106,7 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public String uploadVideo(MultipartFile file, Long instructorId, Long courseId) {
+    public String uploadVideo(MultipartFile file, UUID instructorId, UUID courseId) {
         try {
             String uniqueFileName = generateUniqueFileName(file.getOriginalFilename());
             String s3Key = buildS3Key(instructorId, courseId, uniqueFileName);
@@ -164,8 +164,8 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public String buildS3Key(Long instructorId, Long courseId, String fileName) {
-        return String.format("%s/instructor-%d/course-%d/%s",
+    public String buildS3Key(UUID instructorId, UUID courseId, String fileName) {
+        return String.format("%s/instructor-%s/course-%s/%s",
                 videoConfigProperties.getStoragePath(),
                 instructorId,
                 courseId,
