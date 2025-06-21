@@ -117,7 +117,6 @@ public class InstructorController {
         } catch (Exception e) {
             log.error("Error listing videos: ", e);
             return ResponseEntity.badRequest().build();
-
         }
     }
 }
