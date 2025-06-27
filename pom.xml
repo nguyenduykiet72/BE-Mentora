@@ -130,6 +130,11 @@
             <version>2.31.56</version>
             <scope>compile</scope>
         </dependency>
+        <!-- OAuth2 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,5 +1,6 @@
 package com.example.bementora.entity;
 
+import com.example.bementora.enums.AuthProviderEnum;
 import com.example.bementora.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -74,6 +75,15 @@ public class UserEntity {
 
     @Column(name = "resetPasswordTokenExp")
     private LocalDateTime resetPasswordTokenExp;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProviderEnum provider = AuthProviderEnum.LOCAL;
+
+    private String providerId;
+
+    private String avatarUrl;
+
+    private Boolean emailVerified = false;
 
     // Relationships
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)

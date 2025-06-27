@@ -23,7 +23,6 @@ spring:
       port: 6379
       timeout: 2000ms
       database: 0
-
   cache:
     type: redis
     redis:
@@ -31,6 +30,34 @@ spring:
       cache-null-values: false
       use-key-prefix: true
       key-prefix: "mentora:"
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - user:email
+              - read:user
+          facebook:
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
+            scope:
+              - email
+              - public_profile
+        provider:
+          facebook:
+            authorization-uri: https://www.facebook.com/v23.0/dialog/oauth
+            token-uri: https://graph.facebook.com/v23.0/oauth/access_token
+            user-info-uri: https://graph.facebook.com/v23.0/me?fields=id,name,email
 
 application:
   security:
@@ -40,6 +67,9 @@ application:
       refreshTokenExpiration: 604800000
       cookie:
         secure: true
+  oauth2:
+    success-redirect-url: ${FRONTEND_URL:http://localhost:3000}/auth/success
+    failure-redirect-url: ${FRONTEND_URL:http://localhost:3000}/auth/failure
 
 aws:
   s3:
