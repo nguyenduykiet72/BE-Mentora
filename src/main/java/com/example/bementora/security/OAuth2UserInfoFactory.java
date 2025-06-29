@@ -1,6 +1,7 @@
 package com.example.bementora.security;
 
 import com.example.bementora.enums.AuthProviderEnum;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 
 import java.util.Map;
 

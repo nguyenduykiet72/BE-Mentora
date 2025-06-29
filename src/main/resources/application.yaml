@@ -89,3 +89,7 @@ app:
       - video/x-flv
       - video/webm
     storage-path: ${VIDEO_STORAGE_PATH:videos}
+
+VNPay:
+  vnp_TmnCode: ${VNPay_vnp_TmnCode}
+  secretKey: ${VNPay_secretKey}
