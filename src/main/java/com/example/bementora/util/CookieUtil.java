@@ -7,7 +7,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
-
 public class CookieUtil {
     private final JwtProperties jwtProperties;
 
