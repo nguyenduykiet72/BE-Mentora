@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BeMentoraApplication {
     public static void main(String[] args) {
         SpringApplication.run(BeMentoraApplication.class, args);
-        System.out.println("Hello World!");
     }
 
 }
